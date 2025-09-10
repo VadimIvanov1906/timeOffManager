@@ -1,0 +1,22 @@
+npm ERR! code ERESOLVE
+npm ERR! ERESOLVE unable to resolve dependency tree
+npm ERR! 
+npm ERR! While resolving: timeoff-manager@0.0.1
+npm ERR! Found: storybook@7.6.20
+npm ERR! node_modules/storybook
+npm ERR!   dev storybook@"7.6.20" from the root project
+npm ERR! 
+npm ERR! Could not resolve dependency:
+npm ERR! peer storybook@"^9.1.5" from eslint-plugin-storybook@9.1.5
+npm ERR! node_modules/eslint-plugin-storybook
+npm ERR!   dev eslint-plugin-storybook@"*" from the root project
+npm ERR! 
+npm ERR! Fix the upstream dependency conflict, or retry
+npm ERR! this command with --force or --legacy-peer-deps
+npm ERR! to accept an incorrect (and potentially broken) dependency resolution.
+npm ERR! 
+npm ERR! 
+npm ERR! For a full report see:
+npm ERR! C:\Users\vadiv\AppData\Local\npm-cache\_logs\2025-09-10T11_53_51_804Z-eresolve-report.txt
+
+npm ERR! A complete log of this run can be found in: C:\Users\vadiv\AppData\Local\npm-cache\_logs\2025-09-10T11_53_51_804Z-debug-0.log
