@@ -1,7 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PTORequest, TimeOffType } from "../types/timeOffTypes";
 import { uid } from "../utils/timeOffUtils";
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonDatetime, IonItem, IonLabel, IonList, IonSelect, IonSelectOption, IonTextarea } from "@ionic/react";
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonDatetime,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonTextarea,
+} from "@ionic/react";
 
 export type RequestFormProps = {
   onSubmit: (r: PTORequest) => void;
@@ -13,29 +26,30 @@ export const RequestForm: React.FC<RequestFormProps> = ({ onSubmit, currentUser 
   const [start, setStart] = useState<string>("");
   const [end, setEnd] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  function validate(): boolean {
-    const e: string[] = [];
-    if (!currentUser.trim()) e.push("Employee name is required.");
-    if (!type) e.push("Time off type is required.");
-    if (!start) e.push("Start date is required.");
-    if (!end) e.push("End date is required.");
-    if (start && end && start > end) e.push("Start date must be before or equal to End date.");
+  // Real-time validation on field change
+  useEffect(() => {
+    const e: Record<string, string> = {};
+    if (!currentUser.trim()) e.employee = "Employee name is required.";
+    if (!type) e.type = "Time off type is required.";
+    if (!start) e.start = "Start date is required.";
+    if (!end) e.end = "End date is required.";
+    if (start && end && start > end) e.dateOrder = "Start date must be before or equal to End date.";
     setErrors(e);
-    return e.length === 0;
-  }
+  }, [currentUser, type, start, end]);
 
-  function reset() {
+  const reset = () => {
     setType(undefined);
     setStart("");
     setEnd("");
     setNotes("");
-    setErrors([]);
-  }
+    setErrors({});
+  };
 
-  function handleSubmit() {
-    if (!validate()) return;
+  const handleSubmit = () => {
+    if (Object.keys(errors).length > 0) return;
+
     const req: PTORequest = {
       id: uid(),
       employee: currentUser,
@@ -46,36 +60,43 @@ export const RequestForm: React.FC<RequestFormProps> = ({ onSubmit, currentUser 
       status: "Pending",
       createdAt: new Date().toISOString(),
     };
+
     onSubmit(req);
     reset();
-  }
+  };
+
+  const inputClass = (field: string) =>
+    errors[field] ? "border border-red-500 rounded-lg" : "";
 
   return (
-    <IonCard className="rounded-2xl">
+    <IonCard className="rounded-2xl shadow-md">
       <IonCardHeader>
-        <IonCardTitle className="text-lg">Request Time Off</IonCardTitle>
+        <IonCardTitle className="text-lg font-semibold">Request Time Off</IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
         <IonList inset>
-          <IonItem>
-            <IonLabel position="stacked" style={{marginBottom: 5}}>Start Date</IonLabel>
+          <IonItem className={inputClass("start")}>
+            <IonLabel position="stacked">Start Date</IonLabel>
             <IonDatetime
               presentation="date"
               value={start}
               onIonChange={(e) => setStart(e.detail.value as string)}
-              className="w-full"
             />
+            {errors.start && <p className="text-sm mt-1" style={{color: "red"}}>{errors.start}</p>}
+            {errors.dateOrder && <p className="text-sm mt-1" style={{color: "red"}}>{errors.dateOrder}</p>}
           </IonItem>
-          <IonItem>
-            <IonLabel position="stacked" style={{marginBottom: 5}}>End Date</IonLabel>
+
+          <IonItem className={inputClass("end")}>
+            <IonLabel position="stacked">End Date</IonLabel>
             <IonDatetime
               presentation="date"
               value={end}
               onIonChange={(e) => setEnd(e.detail.value as string)}
-              className="w-full"
             />
+            {errors.end && <p className="text-sm mt-1" style={{color: "red"}}>{errors.end}</p>}
           </IonItem>
-          <IonItem>
+
+          <IonItem className={inputClass("type")}>
             <IonLabel position="stacked">Time Off Type</IonLabel>
             <IonSelect
               placeholder="Select type"
@@ -83,10 +104,14 @@ export const RequestForm: React.FC<RequestFormProps> = ({ onSubmit, currentUser 
               onIonChange={(e) => setType(e.detail.value)}
             >
               {["Vacation", "Sick", "Personal", "Unpaid"].map((t) => (
-                <IonSelectOption key={t} value={t}>{t}</IonSelectOption>
+                <IonSelectOption key={t} value={t}>
+                  {t}
+                </IonSelectOption>
               ))}
             </IonSelect>
+            {errors.type && <p className="text-sm mt-1" style={{color: "red"}}>{errors.type}</p>}
           </IonItem>
+
           <IonItem>
             <IonLabel position="stacked">Notes (optional)</IonLabel>
             <IonTextarea
@@ -97,16 +122,11 @@ export const RequestForm: React.FC<RequestFormProps> = ({ onSubmit, currentUser 
             />
           </IonItem>
         </IonList>
-        {errors.length > 0 && (
-          <div className="p-3 text-[14px] rounded-xl bg-red-50 text-red-700 mt-3">
-            <ul className="list-disc ml-5">
-              {errors.map((er, i) => <li key={i}>{er}</li>)}
-            </ul>
-          </div>
-        )}
 
         <div className="mt-4">
-          <IonButton expand="block" onClick={handleSubmit}>Submit Request</IonButton>
+          <IonButton expand="block" onClick={handleSubmit} disabled={Object.keys(errors).length > 0}>
+            Submit Request
+          </IonButton>
         </div>
       </IonCardContent>
     </IonCard>
