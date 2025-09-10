@@ -28,7 +28,6 @@ export const RequestForm: React.FC<RequestFormProps> = ({ onSubmit, currentUser 
   const [notes, setNotes] = useState<string>("");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Real-time validation on field change
   useEffect(() => {
     const e: Record<string, string> = {};
     if (!currentUser.trim()) e.employee = "Employee name is required.";
