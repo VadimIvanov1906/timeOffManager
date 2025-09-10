@@ -12,7 +12,7 @@ export const EmployeeView: React.FC<{
         <div>
             <RequestForm onSubmit={onSubmit} currentUser={currentUser} />
             <section className="my-requests mt-4">
-                <h3 className="requests-title text-lg font-semibold mb-3">My Requests</h3>
+                <h3 className="requests-title text-lg font-semibold mb-3" style={{marginLeft: 15}}>My Requests</h3>
                 <div className="requests-list">
                     {(!requests || requests.length === 0) && (
                         <EmptyState title="No requests yet" subtitle="Submit your first time-off request above." />
