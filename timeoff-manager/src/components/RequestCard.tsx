@@ -3,7 +3,7 @@ import { PTORequest } from "../types/timeOffTypes";
 import { StatusBadge } from "./StatusBadge";
 import { RowLabel } from "./RowLabel";
 import { closeCircle, checkmarkCircle } from 'ionicons/icons';
-import "./RequestCard.css";
+import "./style/RequestCard.css";
 
 export type RequestCardProps = {
   req: PTORequest;
