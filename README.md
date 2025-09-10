@@ -20,10 +20,10 @@ timeoff-manager/
 
 ```bash
 npm install
-Run Storybook
-```
 
-### Start the Storybook development server:
+```
+### Run Storybook
+Start the Storybook development server:
 ```bash
 npm run storybook
 ```
