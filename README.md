@@ -15,12 +15,14 @@ timeoff-manager/
 └─ package.json
 
 ## Getting Started
-
+root folder is timeoff-manager
 ### Install Dependencies
-
 ```bash
 npm install
-
+```
+### Run Application
+```bash
+npm run start
 ```
 ### Run Storybook
 Start the Storybook development server:
