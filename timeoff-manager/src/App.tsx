@@ -96,7 +96,7 @@ export const App: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <div className="flex items-center justify-between w-full">
-            <IonTitle>PTO Manager</IonTitle>
+            <IonTitle style={{marginTop: 10}}>PTO Manager</IonTitle>
             <div className="flex items-center gap-2 pr-2">
               <IonSegment value={role} onIonChange={(e) => fakeLogin(e.detail.value as Role)}>
                 <IonSegmentButton value="Employee">
